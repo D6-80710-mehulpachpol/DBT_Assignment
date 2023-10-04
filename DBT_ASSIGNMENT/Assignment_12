@@ -1,0 +1,64 @@
+1) Write a query that selects all customers whose ratings are equal to or greater than ANY of Serres’.
+=>
+
+select Cname from CUSTOMERS where Rating >= any(Select Rating from CUSTOMERS,SALESPEOPLE  where CUSTOMERS.Snum = SALESPEOPLE.Snum and Sname ='Serres');
++----------+
+| Cname    |
++----------+
+| Giovanni |
+| Liu      |
+| Grass    |
+| Cisneros |
++----------+
+
+
+2) Write a query using ANY or ALL that will find all salespeople who have no customers located in their city.
+=>
+
+mysql> select Sname ,Cname from SALESPEOPLE,CUSTOMERS where SALESPEOPLE.Snum=CUSTOMERS.Snum and not SALESPEOPLE.City=CUSTOMERS.City; 
++---------+----------+ 
+| Sname   |   Cname  | 
++---------+----------+ 
+| Axelrod | Giovanni | 
+| Serres  | Grass    |
+| Rifkin  | Cisneros |
+| Motika  | Pereira  |
++---------+----------+
+
+
+3) Write a query that selects all orders for amounts greater than any for the customers in London.
+=>
+
+select Onum from ORDERS where Amt > any(select Amt from ORDERS,CUSTOMERS  where
+ ORDERS.Cnum = CUSTOMERS.Cnum and City = 'London');
++------+
+| Onum |
++------+
+| 3002 |
+| 3005 |
+| 3006 |
+| 3009 |
+| 3008 |
+| 3010 |
+| 3011 |
++------+
+
+
+4) Write the above query using MIN or MAX.
+=>
+
+select Onum from ORDERS where Amt > any(select min(Amt) from ORDERS,CUSTOMERS
+where ORDERS.Cnum = CUSTOMERS.Cnum and City = 'London');
++------+
+| Onum |
++------+
+| 3002 |
+| 3005 |
+| 3006 |
+| 3009 |
+| 3008 |
+| 3010 |
+| 3011 |
++------+
+
+

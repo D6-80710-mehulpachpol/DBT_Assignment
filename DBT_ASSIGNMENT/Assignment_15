@@ -1,0 +1,51 @@
+1) Assume there is a table called Multicust, with all of the same column definitions as Salespeople. Write a command that inserts all salespeople with more than one customer into this table.
+=>
+
+create table Multicast as select * from SALESPEOPLE where Snum = any(select Snum from CUSTOMERS group by Snum having count(*) >1);
+
+mysql> select * from  Multicast;
++------+--------+--------+------+
+| Snum | Sname  | City   | Comm |
++------+--------+--------+------+
+| 1001 | Peel   | London | 0.12 |
+| 1004 | Motika | London | 0.11 |
++------+--------+--------+------+
+
+2) Write a command that deletes all customers with no current orders.
+=>
+
+delete from CUSTOMERS where Cnum not in (select Cnum from ORDERS);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from  CUSTOMERS;
++------+----------+-----------+--------+------+
+| Cnum | Cname    | City      | Rating | Snum |
++------+----------+-----------+--------+------+
+| 2001 | Hoffman  | London    |    100 | 1001 |
+| 2002 | Giovanni | Rome      |    300 | 1003 |
+| 2003 | Liu      | San Jose  |    200 | 1004 |
+| 2004 | Grass    | Berlin    |    300 | 1004 |
+| 2008 | Cisneros | San Jose  |    300 | 1007 |
+| 2007 | Pereira  | Rome      |    200 | 1004 |
++------+----------+-----------+--------+------+
+
+3) Write a command that increases by twenty percent the commissions of all salespeople with total orders above Rs. 3,000.
+=>
+
+update SALESPEOPLE set Comm = Comm+0.20 where Snum = any(select Snum from ORDERS group by Snum having sum(Amt)>3000);
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from  SALESPEOPLE;
++------+---------+-----------+------+
+| Snum | Sname   | City      | Comm |
++------+---------+-----------+------+
+| 1001 | Peel    | London    | 0.12 |
+| 1002 | Serres  | San Jose  | 0.33 |
+| 1004 | Motika  | London    | 0.11 |
+| 1007 | Rifkin  | Barcelona | 0.15 |
+| 1003 | Axelrod | New York  | 0.10 |
+| 1100 | Blanco  | San Jose  | NULL |
++------+---------+-----------+------+
+
+

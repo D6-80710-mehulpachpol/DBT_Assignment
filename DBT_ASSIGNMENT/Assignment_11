@@ -1,0 +1,40 @@
+1) Write a query that uses a subquery to obtain all orders for the customer named Cisneros. Assume you do not know his customer number (cnum).
+=>
+
+select Onum from ORDERS where Cnum = (select Cnum from CUSTOMERS where Cname ='Cisneros');
++------+
+| Onum |
++------+
+| 3001 |
+| 3006 |
++------+
+
+
+2) Write a query that produces the names and ratings of all customers who have above-average orders.
+=>
+
+select Cname,Rating,Amt from CUSTOMERS,ORDERS where ORDERS.Cnum=CUSTOMERS.Cnum
+and  Amt > (select avg(Amt) from ORDERS);
++---------+--------+---------+
+| Cname   | Rating | Amt     |
++---------+--------+---------+
+| Liu     |    200 | 5160.45 |
+| Clemens |    100 | 9891.88 |
+| Clemens |    100 | 4723.00 |
++---------+--------+---------+
+
+3) Write a query that selects the total amount in orders for each salesperson for whom this total is greater than the amount of the largest order in the table.
+=>
+
+Select Snum, sum(Amt) from ORDERS group by Snum  having sum(Amt) > (select max(Amt) from ORDERS) ;
++------+----------+
+| Snum | sum(Amt) |
++------+----------+
+| 1001 | 15382.07 |
++------+----------+
+
+
+---------------------------------------------
+
+
+
